@@ -1,0 +1,116 @@
+# System Analytic Router
+
+Herramienta defensiva para analizar trafico de red en tiempo real en una computadora o entorno de router que controles. El proyecto recolecta metricas locales, guarda datos en SQLite y ejecuta un algoritmo de deteccion de anomalias basado en una linea base movil.
+
+> Uso autorizado solamente. Esta herramienta no entra en redes Wi-Fi, no rompe claves y no intercepta trafico ajeno. Para ver trafico de todo un router necesitas acceso administrativo al router, port mirroring, SNMP, logs exportados o una API del fabricante.
+
+
+![alt text](image.png)
+
+
+
+
+## Caracteristicas
+
+- Monitoreo de bytes, paquetes, errores y drops por interfaz.
+- Captura de conexiones activas locales con proceso asociado cuando el sistema lo permite.
+- Base de datos SQLite con tablas para muestras, conexiones y alertas.
+- Capa de features para entrenar algoritmos sin almacenar contenido privado desencriptado.
+- Importacion de DNS y HTTP desde logs/proxies autorizados.
+- Algoritmo funcional de anomalias por z-score sobre trafico por segundo.
+- CLI para listar interfaces, iniciar DB, monitorear y exportar CSV.
+- Captura opcional de metadatos de paquetes con `scapy` si instalas Npcap y ejecutas con permisos de administrador.
+
+## Instalacion
+
+```powershell
+cd outputs\SystemAnalyticRouter
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+pip install -e .
+```
+
+## Uso rapido
+
+Listar interfaces:
+
+```powershell
+sarouter interfaces
+```
+
+Crear base de datos:
+
+```powershell
+sarouter --settings configs\settings.yml init-db
+```
+
+Monitorear todas las interfaces durante 30 segundos:
+
+```powershell
+sarouter --settings configs\settings.yml monitor --duration 30 --connections
+```
+
+Monitorear solo Wi-Fi:
+
+```powershell
+sarouter --settings configs\settings.yml monitor --interface "Wi-Fi" --duration 60
+```
+
+Exportar alertas:
+
+```powershell
+sarouter --settings configs\settings.yml export-csv alerts outputs\alerts.csv
+```
+
+Construir features desde conexiones ya recolectadas:
+
+```powershell
+sarouter --settings configs\settings.yml build-features
+```
+
+Importar DNS autorizado desde CSV:
+
+```powershell
+sarouter --settings configs\settings.yml import-dns-csv logs\dns.csv
+```
+
+Columnas esperadas: `timestamp,device,query,answer,record_type,source`.
+Ejemplo: `docs\examples\dns_events_example.csv`.
+
+Importar HTTP/HTTPS ya visto por un proxy autorizado:
+
+```powershell
+sarouter --settings configs\settings.yml import-http-csv logs\http_authorized.csv
+```
+
+Columnas esperadas: `timestamp,device,method,url,host,path,status_code,bytes_in,bytes_out,user_agent,source`.
+Ejemplo: `docs\examples\http_authorized_example.csv`.
+
+## Como funciona el algoritmo
+
+El detector calcula bytes por segundo para cada interfaz. Despues de un minimo de muestras crea una linea base con una ventana movil. Si el trafico actual se aleja de la media por encima del umbral `zscore_threshold`, genera una alerta `traffic_spike`.
+
+Tambien alerta cuando la interfaz reporta errores o paquetes descartados.
+
+## Datos para algoritmos posteriores
+
+El sistema no intenta romper cifrado. En su lugar almacena datos autorizados y utiles para modelos:
+
+- `flow_features`: resumen por destino, puerto, proceso, conteo de conexiones, duracion y puntaje inicial de riesgo.
+- `dns_events`: consultas DNS autorizadas desde logs del equipo, router, DNS interno o gateway propio.
+- `http_events_authorized`: eventos HTTP/HTTPS provenientes de un proxy autorizado con consentimiento y certificado instalado.
+
+Con estas tablas puedes entrenar algoritmos de comportamiento normal por dispositivo, dominio, puerto, horario y proceso, sin guardar contenido privado completo.
+
+## Integracion real con router
+
+Para analizar trafico de todo el router, configura una de estas fuentes autorizadas:
+
+- Logs del router exportados por syslog.
+- SNMP si tu router lo soporta.
+- Port mirroring hacia esta computadora.
+- API del router o firewall.
+- Un equipo gateway propio donde esta herramienta se ejecute directamente.
+
+El modulo actual deja la base preparada para incorporar esos recolectores sin cambiar el almacenamiento ni el algoritmo.
