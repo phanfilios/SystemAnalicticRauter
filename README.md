@@ -4,8 +4,7 @@ Herramienta defensiva para analizar trafico de red en tiempo real en una computa
 
 > Uso autorizado solamente. Esta herramienta no entra en redes Wi-Fi, no rompe claves y no intercepta trafico ajeno. Para ver trafico de todo un router necesitas acceso administrativo al router, port mirroring, SNMP, logs exportados o una API del fabricante.
 
-
-![alt text](image.png)
+<img width="1049" height="982" alt="image" src="https://github.com/user-attachments/assets/2d946c54-2bca-48fb-8475-0c8b71ba66ea" />
 
 
 
