@@ -1,0 +1,3 @@
+timestamp,device,query,answer,record_type,source
+2026-05-31T21:30:00+00:00,pc-lenovo,example.com,93.184.216.34,A,authorized_dns_log
+2026-05-31T21:30:03+00:00,pc-lenovo,openai.com,104.18.33.45,A,authorized_dns_log

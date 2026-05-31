@@ -1,0 +1,46 @@
+erDiagram
+    TRAFFIC_SAMPLES {
+        integer id
+        text timestamp
+        text interface
+        integer bytes_sent
+        integer bytes_recv
+        integer packets_sent
+        integer packets_recv
+    }
+    CONNECTION_SNAPSHOTS {
+        integer id
+        text timestamp
+        text local_address
+        integer local_port
+        text remote_address
+        integer remote_port
+        text process_name
+    }
+    ALERTS {
+        integer id
+        text timestamp
+        text severity
+        text category
+        text message
+    }
+    FLOW_FEATURES {
+        integer id
+        text generated_at
+        text device
+        text remote_address
+        integer remote_port
+        real risk_score
+    }
+    DNS_EVENTS {
+        integer id
+        text timestamp
+        text device
+        text query
+    }
+    HTTP_EVENTS_AUTHORIZED {
+        integer id
+        text timestamp
+        text host
+        integer status_code
+    }

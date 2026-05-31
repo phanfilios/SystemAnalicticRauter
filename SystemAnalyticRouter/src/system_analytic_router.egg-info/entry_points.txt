@@ -1,0 +1,2 @@
+[console_scripts]
+sarouter = system_analytic_router.cli:main

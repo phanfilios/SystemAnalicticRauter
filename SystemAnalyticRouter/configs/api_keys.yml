@@ -1,0 +1,8 @@
+# Copy this file to api_keys.local.yml for real credentials.
+# Do not commit secrets.
+router:
+  api_base_url: ""
+  token_env_var: "ROUTER_API_TOKEN"
+snmp:
+  host: ""
+  community_env_var: "ROUTER_SNMP_COMMUNITY"

@@ -1,0 +1,3 @@
+sqlite:
+  path: data/router_analytics.sqlite3
+  journal_mode: WAL

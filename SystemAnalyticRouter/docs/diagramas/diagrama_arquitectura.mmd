@@ -1,0 +1,6 @@
+flowchart LR
+    A["Interfaz / Router autorizado"] --> B["Recolector"]
+    B --> C["Normalizador"]
+    C --> D["Detector de anomalias"]
+    C --> E["SQLite"]
+    D --> F["Alertas"]

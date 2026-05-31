@@ -1,0 +1,6 @@
+psutil>=5.9.8
+PyYAML>=6.0.1
+pytest>=8.0.0
+
+# Optional packet metadata capture. Requires Npcap/admin privileges on Windows.
+scapy>=2.5.0

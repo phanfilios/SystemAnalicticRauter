@@ -1,0 +1,12 @@
+capture:
+  sample_interval_seconds: 2
+  connection_scan_every: 5
+  authorized_capture_only: true
+
+analytics:
+  window: 30
+  min_baseline_samples: 8
+  zscore_threshold: 3.0
+
+database:
+  path: data/router_analytics.sqlite3
